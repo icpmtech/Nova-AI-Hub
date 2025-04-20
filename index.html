@@ -1,1 +1,29 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nova Hub - AI Pilots Creator</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <header>
+    <h1>Nova Hub - AI Pilots Creator</h1>
+  </header>
+  <main class="container">
+    <form id="pilotForm">
+      <h2>Create New AI Pilot</h2>
+      <input type="text" id="pilotName" placeholder="Pilot Name" required />
+      <input type="text" id="pilotRole" placeholder="Pilot Role (e.g. Assistant, Hacker)" required />
+      <textarea id="pilotPrompt" placeholder="Pilot Prompt / Personality" required></textarea>
+      <button type="submit">Create Pilot</button>
+    </form>
+    <section id="pilotList">
+      <h2>Your AI Pilots</h2>
+      <ul id="pilotsContainer"></ul>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
