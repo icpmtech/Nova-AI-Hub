@@ -1,231 +1,633 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nova Hub - AI Pilots Creator</title>
-  <link rel="stylesheet" href="style.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova AI Hub - Docker & Cloud Integrations</title>
+    <style>
+        :root {
+            --primary-color: #25F4EE;
+            --secondary-color: #FE2C55;
+            --dark-color: #010101;
+            --light-color: #ffffff;
+            --gray-color: #f1f1f1;
+            --light-gray: #f9f9f9;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            font-family: var(--font-main);
+            line-height: 1.6;
+            color: var(--dark-color);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--light-gray);
+        }
+        
+        h1, h2, h3 {
+            font-weight: 700;
+        }
+        
+        h1 {
+            color: var(--secondary-color);
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        h2 {
+            margin-top: 40px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            color: var(--secondary-color);
+        }
+        
+        pre {
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            padding: 15px;
+            border-radius: 5px;
+            overflow: auto;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            padding: 2px 5px;
+            background-color: var(--gray-color);
+            border-radius: 3px;
+        }
+        
+        .container {
+            background-color: var(--light-color);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: var(--light-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+        }
+        
+        .card h3 {
+            margin-top: 0;
+            color: var(--secondary-color);
+            font-size: 1.5em;
+        }
+        
+        .tag {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--secondary-color);
+            color: var(--light-color);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: #d91944;
+            transform: scale(1.05);
+        }
+        
+        .cloud-section {
+            margin-top: 50px;
+        }
+        
+        .note {
+            background-color: #fff8e1;
+            border-left: 4px solid var(--secondary-color);
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            margin-right: 5px;
+            transition: all 0.3s;
+        }
+        
+        .tab:hover {
+            background-color: rgba(37, 244, 238, 0.1);
+        }
+        
+        .tab.active {
+            background-color: var(--light-color);
+            border-color: #ddd;
+            margin-bottom: -1px;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        
+        /* TikTok style additions */
+        .tiktok-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+        }
+        
+        .tiktok-logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+        
+        .tiktok-nav {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .tiktok-nav a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        .tiktok-nav a:hover {
+            color: var(--secondary-color);
+        }
+        
+        .video-card {
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px 0;
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            position: relative;
+        }
+        
+        .video-header {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            gap: 10px;
+        }
+        
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-color);
+            font-weight: 700;
+        }
+        
+        .video-user {
+            font-weight: 600;
+        }
+        
+        .video-description {
+            padding: 10px;
+        }
+        
+        .video-actions {
+            display: flex;
+            padding: 10px;
+            gap: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .video-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        
+        /* Language selector */
+        .language-selector {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .language-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background-color: var(--light-color);
+            border: 1px solid #ddd;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .language-btn:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--light-color);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 200px;
+            z-index: 100;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .language-dropdown.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        .language-option {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .language-option:hover {
+            background-color: #f5f5f5;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* For smaller screens */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .tiktok-nav {
+                gap: 10px;
+            }
+            
+            .card {
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Nova Hub - AI Pilots Creator</h1>
-    <nav>
-      <ul>
-        <li><a href="#create" class="active">Create</a></li>
-        <li><a href="#templates">Templates</a></li>
-        <li><a href="#library">Library</a></li>
-      </ul>
-    </nav>
-  </header>
-  
-  <main class="container">
-    <!-- Create Pilot Section -->
-    <section id="create" class="page active">
-      <div class="page-grid">
-        <form id="pilotForm">
-          <h2>Create New AI Pilot</h2>
-          <input type="text" id="pilotName" placeholder="Pilot Name" required />
-          <input type="text" id="pilotRole" placeholder="Pilot Role (e.g. Assistant, Hacker)" required />
-          <textarea id="pilotPrompt" placeholder="Pilot Prompt / Personality" required></textarea>
-          <button type="submit">Create Pilot</button>
-        </form>
-        <section id="pilotList">
-          <h2>Your AI Pilots</h2>
-          <ul id="pilotsContainer"></ul>
-        </section>
-      </div>
-    </section>
-    
-    <!-- Templates Section -->
-    <section id="templates" class="page">
-      <h2>AI Pilot Templates</h2>
-      <p class="section-description">Choose from our pre-made templates or customize them to your needs</p>
-      
-      <div class="templates-grid">
-        <!-- Template 1 -->
-        <div class="template-card" data-id="writing-assistant">
-          <div class="template-header">
-            <h3>Writing Assistant</h3>
-            <span class="template-badge">Popular</span>
-          </div>
-          <p class="template-description">Helps with writing tasks, editing, and creative content generation.</p>
-          <div class="template-details">
-            <div class="detail-item">
-              <span class="detail-label">Specialization:</span>
-              <span class="detail-value">Content Creation</span>
+    <div class="container">
+        <div class="tiktok-header">
+            <div class="tiktok-logo">Nova AI Hub</div>
+            <div class="tiktok-nav">
+                <a href="#library">Library</a>
+                <a href="#tutorials">Tutorials</a>
+                <a href="#community">Community</a>
             </div>
-            <div class="detail-item">
-              <span class="detail-label">Tone:</span>
-              <span class="detail-value">Professional, Creative</span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Ideal for:</span>
-              <span class="detail-value">Writers, Bloggers, Students</span>
-            </div>
-          </div>
-          <div class="template-actions">
-            <button class="btn-use-template">Use Template</button>
-            <button class="btn-preview">Preview</button>
-          </div>
         </div>
         
-        <!-- Template 2 -->
-        <div class="template-card" data-id="coding-mentor">
-          <div class="template-header">
-            <h3>Coding Mentor</h3>
-            <span class="template-badge">Technical</span>
-          </div>
-          <p class="template-description">Helps with programming, code reviews, and learning computer science.</p>
-          <div class="template-details">
-            <div class="detail-item">
-              <span class="detail-label">Specialization:</span>
-              <span class="detail-value">Software Development</span>
+        <div class="language-selector">
+            <div class="language-btn" onclick="toggleLanguageDropdown()">
+                <span id="current-language">English</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
             </div>
-            <div class="detail-item">
-              <span class="detail-label">Tone:</span>
-              <span class="detail-value">Educational, Precise</span>
+            <div class="language-dropdown" id="language-dropdown">
+                <div class="language-option" onclick="changeLanguage('en')">English</div>
+                <div class="language-option" onclick="changeLanguage('es')">Español</div>
+                <div class="language-option" onclick="changeLanguage('fr')">Français</div>
+                <div class="language-option" onclick="changeLanguage('de')">Deutsch</div>
+                <div class="language-option" onclick="changeLanguage('zh')">中文</div>
+                <div class="language-option" onclick="changeLanguage('ja')">日本語</div>
+                <div class="language-option" onclick="changeLanguage('ko')">한국어</div>
+                <div class="language-option" onclick="changeLanguage('ru')">Русский</div>
             </div>
-            <div class="detail-item">
-              <span class="detail-label">Ideal for:</span>
-              <span class="detail-value">Developers, Students, Tech Teams</span>
-            </div>
-          </div>
-          <div class="template-actions">
-            <button class="btn-use-template">Use Template</button>
-            <button class="btn-preview">Preview</button>
-          </div>
         </div>
         
-        <!-- Template 3 -->
-        <div class="template-card" data-id="research-assistant">
-          <div class="template-header">
-            <h3>Research Assistant</h3>
-            <span class="template-badge">Academic</span>
-          </div>
-          <p class="template-description">Helps with research organization, literature reviews, and academic writing.</p>
-          <div class="template-details">
-            <div class="detail-item">
-              <span class="detail-label">Specialization:</span>
-              <span class="detail-value">Academic Research</span>
+        <h1 class="lang" data-lang-en="Nova AI Hub - Docker & Cloud Integrations" data-lang-es="Nova AI Hub - Integraciones Docker y Nube" data-lang-fr="Nova AI Hub - Intégrations Docker et Cloud" data-lang-de="Nova AI Hub - Docker- und Cloud-Integrationen" data-lang-zh="Nova AI Hub - Docker 和云集成" data-lang-ja="Nova AI Hub - Docker とクラウド統合" data-lang-ko="Nova AI Hub - Docker 및 클라우드 통합" data-lang-ru="Nova AI Hub - Интеграции Docker и облачных сервисов"></h1>
+        
+        <div class="video-card">
+            <div class="video-header">
+                <div class="profile-pic">N</div>
+                <div class="video-user">NovaAIHub</div>
             </div>
-            <div class="detail-item">
-              <span class="detail-label">Tone:</span>
-              <span class="detail-value">Analytical, Scholarly</span>
+            <div class="video-description">
+                <p class="lang" data-lang-en="Check out these awesome Docker configurations and cloud integrations! #AI #Docker #CloudComputing" data-lang-es="¡Mira estas increíbles configuraciones de Docker e integraciones en la nube! #AI #Docker #CloudComputing" data-lang-fr="Découvrez ces superbes configurations Docker et intégrations cloud ! #AI #Docker #CloudComputing" data-lang-de="Schau dir diese tollen Docker-Konfigurationen und Cloud-Integrationen an! #AI #Docker #CloudComputing" data-lang-zh="查看这些出色的Docker配置和云集成! #AI #Docker #CloudComputing" data-lang-ja="これらの素晴らしいDockerの設定とクラウド統合をチェックしてください！ #AI #Docker #CloudComputing" data-lang-ko="이 멋진 Docker 구성 및 클라우드 통합을 확인하세요! #AI #Docker #CloudComputing" data-lang-ru="Ознакомьтесь с этими потрясающими конфигурациями Docker и облачными интеграциями! #AI #Docker #CloudComputing"></p>
             </div>
-            <div class="detail-item">
-              <span class="detail-label">Ideal for:</span>
-              <span class="detail-value">Researchers, PhD Students, Academics</span>
+            <div class="video-actions">
+                <div class="video-action">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 10V14H10V21H14V14H17L18 10H14V8C14 7.44772 14.4477 7 15 7H18V3H15C12.2386 3 10 5.23858 10 8V10H7Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Share</span>
+                </div>
+                <div class="video-action">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Like</span>
+                </div>
+                <div class="video-action">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Comment</span>
+                </div>
             </div>
-          </div>
-          <div class="template-actions">
-            <button class="btn-use-template">Use Template</button>
-            <button class="btn-preview">Preview</button>
-          </div>
         </div>
         
-        <!-- Template 4 -->
-        <div class="template-card" data-id="business-strategist">
-          <div class="template-header">
-            <h3>Business Strategist</h3>
-            <span class="template-badge">Professional</span>
-          </div>
-          <p class="template-description">Helps with business planning, market analysis, and strategic decision-making.</p>
-          <div class="template-details">
-            <div class="detail-item">
-              <span class="detail-label">Specialization:</span>
-              <span class="detail-value">Business Strategy</span>
+        <div class="section">
+            <h2 class="lang" data-lang-en="Docker Configurations" data-lang-es="Configuraciones Docker" data-lang-fr="Configurations Docker" data-lang-de="Docker-Konfigurationen" data-lang-zh="Docker 配置" data-lang-ja="Docker 構成" data-lang-ko="Docker 구성" data-lang-ru="Конфигурации Docker"></h2>
+            <p class="lang" data-lang-en="Below are Docker configurations for popular AI tools that you can easily integrate into your existing infrastructure:" data-lang-es="A continuación se muestran configuraciones de Docker para herramientas de IA populares que puede integrar fácilmente en su infraestructura existente:" data-lang-fr="Voici les configurations Docker pour les outils d'IA populaires que vous pouvez facilement intégrer à votre infrastructure existante :" data-lang-de="Nachfolgend finden Sie Docker-Konfigurationen für beliebte KI-Tools, die Sie einfach in Ihre bestehende Infrastruktur integrieren können:" data-lang-zh="以下是流行AI工具的Docker配置，您可以轻松地将其集成到现有基础架构中：" data-lang-ja="以下は、既存のインフラストラクチャに簡単に統合できる人気のAIツールのDocker構成です：" data-lang-ko="다음은 기존 인프라에 쉽게 통합할 수 있는 인기 AI 도구를 위한 Docker 구성입니다:" data-lang-ru="Ниже приведены конфигурации Docker для популярных инструментов ИИ, которые вы можете легко интегрировать в свою существующую инфраструктуру:"></p>
+            
+            <div class="card">
+                <h3>Ollama</h3>
+                <div>
+                    <span class="tag">llm</span>
+                    <span class="tag">local</span>
+                    <span class="tag">docker</span>
+                </div>
+                <p class="lang" data-lang-en="Run Ollama locally to serve and create AI models" data-lang-es="Ejecute Ollama localmente para servir y crear modelos de IA" data-lang-fr="Exécutez Ollama localement pour servir et créer des modèles d'IA" data-lang-de="Führen Sie Ollama lokal aus, um KI-Modelle bereitzustellen und zu erstellen" data-lang-zh="在本地运行Ollama以提供和创建AI模型" data-lang-ja="AIモデルを提供および作成するためにローカルでOllamaを実行します" data-lang-ko="AI 모델을 제공하고 생성하기 위해 Ollama를 로컬로 실행" data-lang-ru="Запустите Ollama локально для обслуживания и создания моделей ИИ"></p>
+                <pre>
+version: '3'
+services:
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+    command: serve
+
+volumes:
+  ollama:
+    name: ollama-data</pre>
             </div>
-            <div class="detail-item">
-              <span class="detail-label">Tone:</span>
-              <span class="detail-value">Professional, Analytical</span>
+            
+            <div class="card">
+                <h3>Ollama WebUI</h3>
+                <div>
+                    <span class="tag">llm</span>
+                    <span class="tag">ui</span>
+                    <span class="tag">docker</span>
+                </div>
+                <p class="lang" data-lang-en="A web interface for interacting with Ollama models" data-lang-es="Una interfaz web para interactuar con modelos Ollama" data-lang-fr="Une interface web pour interagir avec les modèles Ollama" data-lang-de="Eine Weboberfläche für die Interaktion mit Ollama-Modellen" data-lang-zh="用于与Ollama模型交互的Web界面" data-lang-ja="Ollamaモデルと対話するためのウェブインターフェース" data-lang-ko="Ollama 모델과 상호 작용하기 위한 웹 인터페이스" data-lang-ru="Веб-интерфейс для взаимодействия с моделями Ollama"></p>
+                <pre>
+version: '3'
+services:
+  ollama-webui:
+    image: ghcr.io/ollama-webui/ollama-webui:latest
+    container_name: ollama-webui
+    restart: unless-stopped
+    ports:
+      - "3000:8080"
+    environment:
+      - "OLLAMA_API_BASE_URL=http://ollama:11434/api"
+    depends_on:
+      - ollama</pre>
             </div>
-            <div class="detail-item">
-              <span class="detail-label">Ideal for:</span>
-              <span class="detail-value">Entrepreneurs, Managers, Consultants</span>
+            
+            <div class="card">
+                <h3>AUTOMATIC1111 Stable Diffusion WebUI</h3>
+                <div>
+                    <span class="tag">stable-diffusion</span>
+                    <span class="tag">ai-art</span>
+                    <span class="tag">image-generation</span>
+                    <span class="tag">docker</span>
+                </div>
+                <p class="lang" data-lang-en="AUTOMATIC1111's Stable Diffusion web interface for generating and processing images" data-lang-es="Interfaz web Stable Diffusion de AUTOMATIC1111 para generar y procesar imágenes" data-lang-fr="Interface web Stable Diffusion d'AUTOMATIC1111 pour générer et traiter des images" data-lang-de="AUTOMATIC1111's Stable Diffusion Weboberfläche zum Generieren und Verarbeiten von Bildern" data-lang-zh="AUTOMATIC1111的Stable Diffusion网页界面，用于生成和处理图像" data-lang-ja="AUTOMATIC1111のStable Diffusionウェブインターフェース：画像の生成と処理用" data-lang-ko="이미지 생성 및 처리를 위한 AUTOMATIC1111의 Stable Diffusion 웹 인터페이스" data-lang-ru="Веб-интерфейс Stable Diffusion от AUTOMATIC1111 для создания и обработки изображений"></p>
+                
+                <div class="tabs">
+                    <div class="tab active" onclick="switchTab(event, 'cpu')">CPU Version</div>
+                    <div class="tab" onclick="switchTab(event, 'gpu')">GPU Version</div>
+                </div>
+                
+                <div id="cpu" class="tab-content active">
+                    <pre>
+version: '3'
+services:
+  stable-diffusion-webui:
+    image: ghcr.io/AbdBarho/stable-diffusion-webui:auto-cpu
+    container_name: stable-diffusion-webui
+    restart: unless-stopped
+    ports:
+      - "7860:7860"
+    volumes:
+      - ./stable-diffusion-data:/data
+    environment:
+      - CLI_ARGS=--listen --port 7860 --allow-code --medvram</pre>
+                </div>
+                
+                <div id="gpu" class="tab-content">
+                    <pre>
+version: '3'
+services:
+  stable-diffusion-webui:
+    image: ghcr.io/AbdBarho/stable-diffusion-webui:auto-nvidia
+    container_name: stable-diffusion-webui
+    restart: unless-stopped
+    ports:
+      - "7860:7860"
+    volumes:
+      - ./stable-diffusion-data:/data
+    environment:
+      - CLI_ARGS=--listen --port 7860 --allow-code --medvram
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]</pre>
+                </div>
             </div>
-          </div>
-          <div class="template-actions">
-            <button class="btn-use-template">Use Template</button>
-            <button class="btn-preview">Preview</button>
-          </div>
         </div>
         
-        <!-- Template 5 -->
-        <div class="template-card" data-id="wellness-coach">
-          <div class="template-header">
-            <h3>Wellness Coach</h3>
-            <span class="template-badge">Health</span>
-          </div>
-          <p class="template-description">Helps with wellness planning, healthy habits, and lifestyle improvement.</p>
-          <div class="template-details">
-            <div class="detail-item">
-              <span class="detail-label">Specialization:</span>
-              <span class="detail-value">Health & Wellness</span>
+        <div class="cloud-section">
+            <h2 class="lang" data-lang-en="Cloud Co-pilot Integrations" data-lang-es="Integraciones de copiloto en la nube" data-lang-fr="Intégrations de copilote cloud" data-lang-de="Cloud-Kopilot-Integrationen" data-lang-zh="云端副驾驶集成" data-lang-ja="クラウドコパイロット統合" data-lang-ko="클라우드 코파일럿 통합" data-lang-ru="Интеграции облачных ко-пилотов"></h2>
+            <p class="lang" data-lang-en="Create AI co-pilots in popular cloud platforms to enhance your development workflow:" data-lang-es="Cree copilotos de IA en plataformas en la nube populares para mejorar su flujo de trabajo de desarrollo:" data-lang-fr="Créez des copilotes IA dans des plateformes cloud populaires pour améliorer votre flux de travail de développement :" data-lang-de="Erstellen Sie KI-Kopiloten in beliebten Cloud-Plattformen, um Ihren Entwicklungs-Workflow zu verbessern:" data-lang-zh="在流行的云平台中创建AI副驾驶，以增强您的开发工作流程：" data-lang-ja="人気のあるクラウドプラットフォームでAIコパイロットを作成し、開発ワークフローを強化します：" data-lang-ko="인기 클라우드 플랫폼에서 AI 코파일럿을 만들어 개발 워크플로우를 향상시키세요:" data-lang-ru="Создавайте ИИ-копилоты в популярных облачных платформах для улучшения рабочего процесса разработки:"></p>
+            
+            <div class="card">
+                <h3>AWS CodeWhisperer Integration</h3>
+                <p class="lang" data-lang-en="Set up AWS CodeWhisperer as your AI coding assistant:" data-lang-es="Configure AWS CodeWhisperer como su asistente de codificación AI:" data-lang-fr="Configurez AWS CodeWhisperer comme votre assistant de codage IA :" data-lang-de="Richten Sie AWS CodeWhisperer als Ihren KI-Codierungsassistenten ein:" data-lang-zh="将AWS CodeWhisperer设置为您的AI编码助手：" data-lang-ja="AWSコードウィスパラーをAIコーディングアシスタントとして設定します：" data-lang-ko="AWS CodeWhisperer를 AI 코딩 어시스턴트로 설정하세요:" data-lang-ru="Настройте AWS CodeWhisperer в качестве вашего ИИ-помощника по кодированию:"></p>
+                <ol>
+                    <li class="lang" data-lang-en="Install the AWS Toolkit extension for your IDE (VS Code, IntelliJ, etc.)" data-lang-es="Instale la extensión AWS Toolkit para su IDE (VS Code, IntelliJ, etc.)" data-lang-fr="Installez l'extension AWS Toolkit pour votre IDE (VS Code, IntelliJ, etc.)" data-lang-de="Installieren Sie die AWS Toolkit-Erweiterung für Ihre IDE (VS Code, IntelliJ usw.)" data-lang-zh="为您的IDE安装AWS工具包扩展（VS Code，IntelliJ等）" data-lang-ja="IDE（VS Code、IntelliJなど）用のAWSツールキット拡張機能をインストールします" data-lang-ko="IDE(VS Code, IntelliJ 등)에 AWS Toolkit 확장 프로그램 설치" data-lang-ru="Установите расширение AWS Toolkit для вашей IDE (VS Code, IntelliJ и т.д.)"></li>
+                    <li class="lang" data-lang-en="Sign in to your AWS account" data-lang-es="Inicie sesión en su cuenta de AWS" data-lang-fr="Connectez-vous à votre compte AWS" data-lang-de="Melden Sie sich bei Ihrem AWS-Konto an" data-lang-zh="登录您的AWS账户" data-lang-ja="AWSアカウントにサインインします" data-lang-ko="AWS 계정에 로그인" data-lang-ru="Войдите в свою учетную запись AWS"></li>
+                    <li class="lang" data-lang-en="Enable CodeWhisperer through the AWS Console" data-lang-es="通过AWS控制台启用CodeWhisperer" data-lang-fr="Activez CodeWhisperer via la console AWS" data-lang-de="Aktivieren Sie CodeWhisperer über die AWS-Konsole" data-lang-zh="通过AWS控制台启用CodeWhisperer" data-lang-ja="AWSコンソールを通じてCodeWhispererを有効にします" data-lang-ko="AWS 콘솔을 통해 CodeWhisperer 활성화" data-lang-ru="Включите CodeWhisperer через консоль AWS"></li>
+                    <li class="lang" data-lang-en="Configure access permissions" data-lang-es="配置访问权限" data-lang-fr="Configurez les autorisations d'accès" data-lang-de="Konfigurieren Sie die Zugriffsberechtigungen" data-lang-zh="配置访问权限" data-lang-ja="アクセス権限を設定します" data-lang-ko="액세스 권한 구성" data-lang-ru="Настройте права доступа"></li>
+                </ol>
+                <pre>
+# AWS CLI Command to setup CodeWhisperer
+aws codewhisperer create-profile \
+  --profile-name "NovaAIHubCodeWhisperer" \
+  --client-token "unique-client-token"
+
+# Grant permissions to your IAM user/role
+aws iam attach-role-policy \
+  --role-name YourRoleName \
+  --policy-arn arn:aws:iam::aws:policy/AmazonCodeWhispererFullAccess</pre>
+                <a href="https://aws.amazon.com/codewhisperer/" target="_blank" class="btn">AWS CodeWhisperer Documentation</a>
             </div>
-            <div class="detail-item">
-              <span class="detail-label">Tone:</span>
-              <span class="detail-value">Supportive, Motivational</span>
+            
+            <div class="card">
+                <h3>Azure GitHub Copilot Integration</h3>
+                <p class="lang"
+                   data-lang-en="Enable GitHub Copilot in your Azure development environment to boost productivity with AI-powered code suggestions."
+                   data-lang-es="Habilite GitHub Copilot en su entorno de desarrollo de Azure para aumentar la productividad con sugerencias de código impulsadas por IA."
+                   data-lang-fr="Activez GitHub Copilot dans votre environnement de développement Azure pour booster votre productivité grâce aux suggestions de code alimentées par l'IA."
+                   data-lang-de="Aktivieren Sie GitHub Copilot in Ihrer Azure-Entwicklungsumgebung, um mit KI-gestützten Codevorschlägen Ihre Produktivität zu steigern."
+                   data-lang-zh="在您的 Azure 开发环境中启用 GitHub Copilot，以通过 AI 驱动的代码建议提高生产力。"
+                   data-lang-ja="Azure 開発環境で GitHub Copilot を有効にし、AI によるコード補完で生産性を向上させます。"
+                   data-lang-ko="Azure 개발 환경에서 GitHub Copilot을 활성화하여 AI 기반 코드 제안으로 생산성을 높이세요."
+                   data-lang-ru="Включите GitHub Copilot в вашей среде разработки Azure, чтобы повысить производительность с помощью AI-подсказок кода.">
+                </p>
+                <ol>
+                    <li class="lang"
+                        data-lang-en="Ensure your GitHub account has a Copilot subscription or organizational access."
+                        data-lang-es="Asegúrese de que su cuenta de GitHub tenga una suscripción a Copilot o acceso organizacional."
+                        data-lang-fr="Assurez-vous que votre compte GitHub dispose d'un abonnement Copilot ou d'un accès organisationnel."
+                        data-lang-de="Stellen Sie sicher, dass Ihr GitHub-Konto über ein Copilot-Abonnement oder Organisationszugriff verfügt."
+                        data-lang-zh="确保您的 GitHub 帐户具有 Copilot 订阅或组织访问权限。"
+                        data-lang-ja="GitHub アカウントに Copilot サブスクリプションまたは組織アクセスがあることを確認します。"
+                        data-lang-ko="GitHub 계정에 Copilot 구독 또는 조직 액세스 권한이 있는지 확인하세요."
+                        data-lang-ru="Убедитесь, что у вашей учетной записи GitHub есть подписка Copilot или организационный доступ.">
+                    </li>
+                    <li class="lang"
+                        data-lang-en="In the GitHub Enterprise settings, enable Copilot for your organization."
+                        data-lang-es="En la configuración de GitHub Enterprise, habilite Copilot para su organización."
+                        data-lang-fr="Dans les paramètres GitHub Enterprise, activez Copilot pour votre organisation."
+                        data-lang-de="Aktivieren Sie in den GitHub Enterprise-Einstellungen Copilot für Ihre Organisation."
+                        data-lang-zh="在 GitHub Enterprise 设置中为您的组织启用 Copilot。"
+                        data-lang-ja="GitHub Enterprise の設定で組織向けに Copilot を有効にします。"
+                        data-lang-ko="GitHub Enterprise 설정에서 조직에 대해 Copilot을 활성화하세요."
+                        data-lang-ru="В настройках GitHub Enterprise включите Copilot для вашей организации.">
+                    </li>
+                    <li class="lang"
+                        data-lang-en="Connect your GitHub account to Azure DevOps using the Azure DevOps GitHub integration."
+                        data-lang-es="Conecte su cuenta de GitHub a Azure DevOps mediante la integración de GitHub de Azure DevOps."
+                        data-lang-fr="Connectez votre compte GitHub à Azure DevOps à l'aide de l'intégration GitHub d'Azure DevOps."
+                        data-lang-de="Verbinden Sie Ihr GitHub-Konto mit Azure DevOps über die Azure DevOps-GitHub-Integration."
+                        data-lang-zh="使用 Azure DevOps 的 GitHub 集成将您的 GitHub 帐户连接到 Azure DevOps。"
+                        data-lang-ja="Azure DevOps の GitHub 統合を使って GitHub アカウントを Azure DevOps に接続します。"
+                        data-lang-ko="Azure DevOps GitHub 통합을 사용하여 GitHub 계정을 Azure DevOps에 연결하세요."
+                        data-lang-ru="Подключите вашу учетную запись GitHub к Azure DevOps с помощью интеграции GitHub для Azure DevOps.">
+                    </li>
+                    <li class="lang"
+                        data-lang-en="Install the GitHub Copilot extension for Visual Studio or VS Code and sign in."
+                        data-lang-es="Instale la extensión GitHub Copilot para Visual Studio o VS Code e inicie sesión."
+                        data-lang-fr="Installez l'extension GitHub Copilot pour Visual Studio ou VS Code et connectez-vous."
+                        data-lang-de="Installieren Sie die GitHub Copilot-Erweiterung für Visual Studio oder VS Code und melden Sie sich an."
+                        data-lang-zh="为 Visual Studio 或 VS Code 安装 GitHub Copilot 扩展并登录。"
+                        data-lang-ja="Visual Studio または VS Code 用の GitHub Copilot 拡張機能をインストールしてサインインします。"
+                        data-lang-ko="Visual Studio 또는 VS Code용 GitHub Copilot 확장을 설치하고 로그인하세요."
+                        data-lang-ru="Установите расширение GitHub Copilot для Visual Studio или VS Code и войдите в систему.">
+                    </li>
+                </ol>
+                <pre>
+# Azure CLI: Connect Azure DevOps to GitHub
+az devops login --organization https://dev.azure.com/YourOrg
+az devops service-endpoint github create \
+  --name "GitHubCopilot" \
+  --github-url "https://github.com/YourOrg" \
+  --project "YourProject"
+                </pre>
+                <a href="https://docs.github.com/copilot" target="_blank" class="btn">GitHub Copilot Documentation</a>
             </div>
-            <div class="detail-item">
-              <span class="detail-label">Ideal for:</span>
-              <span class="detail-value">Health-conscious individuals, Coaches</span>
-            </div>
-          </div>
-          <div class="template-actions">
-            <button class="btn-use-template">Use Template</button>
-            <button class="btn-preview">Preview</button>
-          </div>
-        </div>
-        
-        <!-- Template 6 -->
-        <div class="template-card" data-id="learning-facilitator">
-          <div class="template-header">
-            <h3>Learning Facilitator</h3>
-            <span class="template-badge">Education</span>
-          </div>
-          <p class="template-description">Helps with learning new subjects, skill development, and knowledge retention.</p>
-          <div class="template-details">
-            <div class="detail-item">
-              <span class="detail-label">Specialization:</span>
-              <span class="detail-value">Education & Learning</span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Tone:</span>
-              <span class="detail-value">Educational, Patient</span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Ideal for:</span>
-              <span class="detail-value">Students, Lifelong Learners, Educators</span>
-            </div>
-          </div>
-          <div class="template-actions">
-            <button class="btn-use-template">Use Template</button>
-            <button class="btn-preview">Preview</button>
-          </div>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Library Section (placeholder) -->
-    <section id="library" class="page">
-      <h2>Your AI Pilot Library</h2>
-      <p class="section-description">Access and manage all your saved AI pilots</p>
-      <div id="libraryContainer">
-        <!-- Will be populated by JavaScript -->
-      </div>
-    </section>
-    
-    <!-- Template Preview Modal -->
-    <div id="templateModal" class="modal">
-      <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        <h2 id="previewTitle">Template Preview</h2>
-        <div id="previewContent"></div>
-        <button id="useTemplateFromPreview" class="btn-primary">Use This Template</button>
-      </div>
-    </div>
-  </main>
-  
-  <script src="script.js"></script>
+        </div> <!-- end .cloud-section -->
+    </div> <!-- end .container -->
+    <script>
+        function toggleLanguageDropdown() {
+            document.getElementById('language-dropdown').classList.toggle('active');
+        }
+        function changeLanguage(lang) {
+            document.querySelectorAll('.lang').forEach(el => {
+                const text = el.getAttribute(`data-lang-${lang}`);
+                if (text) el.textContent = text;
+            });
+            document.getElementById('current-language').textContent =
+                document.querySelector(`.language-option[onclick="changeLanguage('${lang}')"]`).textContent;
+            toggleLanguageDropdown();
+        }
+        function switchTab(evt, tabId) {
+            document.querySelectorAll('.tab, .tab-content').forEach(el => el.classList.remove('active'));
+            evt.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+        // Initialize language on page load
+        document.addEventListener('DOMContentLoaded', () => changeLanguage('en'));
+    </script>
 </body>
 </html>
