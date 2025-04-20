@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,20 +9,223 @@
 <body>
   <header>
     <h1>Nova Hub - AI Pilots Creator</h1>
+    <nav>
+      <ul>
+        <li><a href="#create" class="active">Create</a></li>
+        <li><a href="#templates">Templates</a></li>
+        <li><a href="#library">Library</a></li>
+      </ul>
+    </nav>
   </header>
+  
   <main class="container">
-    <form id="pilotForm">
-      <h2>Create New AI Pilot</h2>
-      <input type="text" id="pilotName" placeholder="Pilot Name" required />
-      <input type="text" id="pilotRole" placeholder="Pilot Role (e.g. Assistant, Hacker)" required />
-      <textarea id="pilotPrompt" placeholder="Pilot Prompt / Personality" required></textarea>
-      <button type="submit">Create Pilot</button>
-    </form>
-    <section id="pilotList">
-      <h2>Your AI Pilots</h2>
-      <ul id="pilotsContainer"></ul>
+    <!-- Create Pilot Section -->
+    <section id="create" class="page active">
+      <div class="page-grid">
+        <form id="pilotForm">
+          <h2>Create New AI Pilot</h2>
+          <input type="text" id="pilotName" placeholder="Pilot Name" required />
+          <input type="text" id="pilotRole" placeholder="Pilot Role (e.g. Assistant, Hacker)" required />
+          <textarea id="pilotPrompt" placeholder="Pilot Prompt / Personality" required></textarea>
+          <button type="submit">Create Pilot</button>
+        </form>
+        <section id="pilotList">
+          <h2>Your AI Pilots</h2>
+          <ul id="pilotsContainer"></ul>
+        </section>
+      </div>
     </section>
+    
+    <!-- Templates Section -->
+    <section id="templates" class="page">
+      <h2>AI Pilot Templates</h2>
+      <p class="section-description">Choose from our pre-made templates or customize them to your needs</p>
+      
+      <div class="templates-grid">
+        <!-- Template 1 -->
+        <div class="template-card" data-id="writing-assistant">
+          <div class="template-header">
+            <h3>Writing Assistant</h3>
+            <span class="template-badge">Popular</span>
+          </div>
+          <p class="template-description">Helps with writing tasks, editing, and creative content generation.</p>
+          <div class="template-details">
+            <div class="detail-item">
+              <span class="detail-label">Specialization:</span>
+              <span class="detail-value">Content Creation</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Tone:</span>
+              <span class="detail-value">Professional, Creative</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Ideal for:</span>
+              <span class="detail-value">Writers, Bloggers, Students</span>
+            </div>
+          </div>
+          <div class="template-actions">
+            <button class="btn-use-template">Use Template</button>
+            <button class="btn-preview">Preview</button>
+          </div>
+        </div>
+        
+        <!-- Template 2 -->
+        <div class="template-card" data-id="coding-mentor">
+          <div class="template-header">
+            <h3>Coding Mentor</h3>
+            <span class="template-badge">Technical</span>
+          </div>
+          <p class="template-description">Helps with programming, code reviews, and learning computer science.</p>
+          <div class="template-details">
+            <div class="detail-item">
+              <span class="detail-label">Specialization:</span>
+              <span class="detail-value">Software Development</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Tone:</span>
+              <span class="detail-value">Educational, Precise</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Ideal for:</span>
+              <span class="detail-value">Developers, Students, Tech Teams</span>
+            </div>
+          </div>
+          <div class="template-actions">
+            <button class="btn-use-template">Use Template</button>
+            <button class="btn-preview">Preview</button>
+          </div>
+        </div>
+        
+        <!-- Template 3 -->
+        <div class="template-card" data-id="research-assistant">
+          <div class="template-header">
+            <h3>Research Assistant</h3>
+            <span class="template-badge">Academic</span>
+          </div>
+          <p class="template-description">Helps with research organization, literature reviews, and academic writing.</p>
+          <div class="template-details">
+            <div class="detail-item">
+              <span class="detail-label">Specialization:</span>
+              <span class="detail-value">Academic Research</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Tone:</span>
+              <span class="detail-value">Analytical, Scholarly</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Ideal for:</span>
+              <span class="detail-value">Researchers, PhD Students, Academics</span>
+            </div>
+          </div>
+          <div class="template-actions">
+            <button class="btn-use-template">Use Template</button>
+            <button class="btn-preview">Preview</button>
+          </div>
+        </div>
+        
+        <!-- Template 4 -->
+        <div class="template-card" data-id="business-strategist">
+          <div class="template-header">
+            <h3>Business Strategist</h3>
+            <span class="template-badge">Professional</span>
+          </div>
+          <p class="template-description">Helps with business planning, market analysis, and strategic decision-making.</p>
+          <div class="template-details">
+            <div class="detail-item">
+              <span class="detail-label">Specialization:</span>
+              <span class="detail-value">Business Strategy</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Tone:</span>
+              <span class="detail-value">Professional, Analytical</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Ideal for:</span>
+              <span class="detail-value">Entrepreneurs, Managers, Consultants</span>
+            </div>
+          </div>
+          <div class="template-actions">
+            <button class="btn-use-template">Use Template</button>
+            <button class="btn-preview">Preview</button>
+          </div>
+        </div>
+        
+        <!-- Template 5 -->
+        <div class="template-card" data-id="wellness-coach">
+          <div class="template-header">
+            <h3>Wellness Coach</h3>
+            <span class="template-badge">Health</span>
+          </div>
+          <p class="template-description">Helps with wellness planning, healthy habits, and lifestyle improvement.</p>
+          <div class="template-details">
+            <div class="detail-item">
+              <span class="detail-label">Specialization:</span>
+              <span class="detail-value">Health & Wellness</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Tone:</span>
+              <span class="detail-value">Supportive, Motivational</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Ideal for:</span>
+              <span class="detail-value">Health-conscious individuals, Coaches</span>
+            </div>
+          </div>
+          <div class="template-actions">
+            <button class="btn-use-template">Use Template</button>
+            <button class="btn-preview">Preview</button>
+          </div>
+        </div>
+        
+        <!-- Template 6 -->
+        <div class="template-card" data-id="learning-facilitator">
+          <div class="template-header">
+            <h3>Learning Facilitator</h3>
+            <span class="template-badge">Education</span>
+          </div>
+          <p class="template-description">Helps with learning new subjects, skill development, and knowledge retention.</p>
+          <div class="template-details">
+            <div class="detail-item">
+              <span class="detail-label">Specialization:</span>
+              <span class="detail-value">Education & Learning</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Tone:</span>
+              <span class="detail-value">Educational, Patient</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Ideal for:</span>
+              <span class="detail-value">Students, Lifelong Learners, Educators</span>
+            </div>
+          </div>
+          <div class="template-actions">
+            <button class="btn-use-template">Use Template</button>
+            <button class="btn-preview">Preview</button>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Library Section (placeholder) -->
+    <section id="library" class="page">
+      <h2>Your AI Pilot Library</h2>
+      <p class="section-description">Access and manage all your saved AI pilots</p>
+      <div id="libraryContainer">
+        <!-- Will be populated by JavaScript -->
+      </div>
+    </section>
+    
+    <!-- Template Preview Modal -->
+    <div id="templateModal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2 id="previewTitle">Template Preview</h2>
+        <div id="previewContent"></div>
+        <button id="useTemplateFromPreview" class="btn-primary">Use This Template</button>
+      </div>
+    </div>
   </main>
+  
   <script src="script.js"></script>
 </body>
 </html>
