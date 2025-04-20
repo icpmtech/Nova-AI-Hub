@@ -607,6 +607,44 @@ az devops service-endpoint github create \
                 <a href="https://docs.github.com/copilot" target="_blank" class="btn">GitHub Copilot Documentation</a>
             </div>
         </div> <!-- end .cloud-section -->
+        <!-- On-Premises Ubuntu Docker Server -->
+            <div class="card">
+                <h3>On-Premises Ubuntu Docker Server</h3>
+                <div>
+                    <span class="tag">on-premises</span>
+                    <span class="tag">docker</span>
+                    <span class="tag">ubuntu</span>
+                </div>
+                <p>Setup a local Docker server on Ubuntu to host and manage your containers on-premises. Follow these steps:</p>
+                <pre>
+# 1. Update package index
+sudo apt-get update
+
+# 2. Install prerequisites
+sudo apt-get install -y ca-certificates curl gnupg lsb-release
+
+# 3. Add Docker's GPG key
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
+  | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+# 4. Setup stable repository
+echo "deb [arch=$(dpkg --print-architecture) \
+  signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] \
+  https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" \
+  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# 5. Install Docker Engine & Compose plugin
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+# 6. Add user to docker group
+sudo usermod -aG docker $USER
+
+# 7. Verify installation
+docker --version
+                </pre>
+            </div>
     </div> <!-- end .container -->
     <script>
         function toggleLanguageDropdown() {
