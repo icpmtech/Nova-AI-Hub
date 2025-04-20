@@ -1,0 +1,122 @@
+<!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova AI Hub - Library</n    </title>
+    <style>
+        :root {
+            --primary-color: #25F4EE;
+            --secondary-color: #FE2C55;
+            --dark-color: #010101;
+            --light-color: #ffffff;
+            --gray-color: #f1f1f1;
+            --light-gray: #f9f9f9;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            font-family: var(--font-main);
+            background-color: var(--light-gray);
+            color: var(--dark-color);
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: var(--light-color);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.8em;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .nav-links a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        h1 {
+            color: var(--secondary-color);
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+        }
+        .card h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        .card p {
+            margin: 10px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: var(--secondary-color);
+            color: var(--light-color);
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #d91944;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">Nova AI Hub</div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="library.html">Library</a>
+            <a href="tutorials.html">Tutorials</a>
+            <a href="community.html">Community</a>
+        </nav>
+    </header>
+    <div class="container">
+        <h1>Library</h1>
+        <div class="card">
+            <h3>Docker Configurations</h3>
+            <p>Pre-configured Docker Compose files and setup guides for AI tools like Ollama, Stable Diffusion, and more.</p>
+            <a href="index.html#library" class="btn">View Docker Setups</a>
+        </div>
+        <div class="card">
+            <h3>On-Premises Ubuntu Server Guide</h3>
+            <p>Step-by-step instructions to set up a local Docker server on Ubuntu for hosting AI workloads on-premises.</p>
+            <a href="index.html#onprem" class="btn">View Server Guide</a>
+        </div>
+        <div class="card">
+            <h3>Cloud Co-pilot Integrations</h3>
+            <p>Documentation and code snippets to integrate AI co-pilots like AWS CodeWhisperer and GitHub Copilot into your cloud workflow.</p>
+            <a href="index.html#cloud" class="btn">View Cloud Integrations</a>
+        </div>
+        <div class="card">
+            <h3>Language Selector & i18n</h3>
+            <p>Implementation details on multi-language support and dynamic content switching using data attributes and JavaScript.</p>
+            <a href="index.html#lang" class="btn">View i18n Implementation</a>
+        </div>
+    </div>
+</body>
+</html>
