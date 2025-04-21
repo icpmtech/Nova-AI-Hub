@@ -8,24 +8,46 @@
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #121212;
-      color: #fff;
+      background-color: var(--bg, #121212);
+      color: var(--text, #fff);
       margin: 0;
       padding: 20px;
+      transition: background-color 0.3s, color 0.3s;
     }
-    h1 {
-      color: #25F4EE;
-      text-align: center;
+    :root {
+      --primary: #25F4EE;
+      --secondary: #FE2C55;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    header h1 {
+      color: var(--primary);
+      margin: 0;
+    }
+    .novo-btn {
+      padding: 10px 16px;
+      background-color: var(--secondary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
     }
     #search-bar {
-      max-width: 500px;
+      max-width: 1000px;
       margin: 0 auto 20px auto;
       display: flex;
+      flex-wrap: wrap;
       gap: 10px;
       justify-content: center;
     }
-    #search-bar input {
-      flex: 1;
+    #search-bar input, #search-bar select {
       padding: 10px;
       border-radius: 8px;
       border: none;
@@ -34,12 +56,16 @@
     }
     #search-bar button {
       padding: 10px 16px;
-      background-color: #25F4EE;
+      background-color: var(--primary);
       color: #000;
       font-weight: bold;
       border: none;
       border-radius: 8px;
       cursor: pointer;
+    }
+    .toggle-mode {
+      background: var(--secondary);
+      color: #fff;
     }
     .content-item {
       background-color: #1e1e1e;
@@ -49,22 +75,29 @@
       box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     }
     .content-item h2 {
-      color: #25F4EE;
+      color: var(--primary);
     }
-    .content-item .actions {
-      margin-top: 10px;
+    .badges {
+      margin-top: 5px;
     }
-    .content-item button {
+    .badge {
+      display: inline-block;
+      background-color: var(--primary);
+      color: #000;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      margin-right: 5px;
+    }
+    .actions { margin-top: 10px; }
+    .actions button {
       padding: 6px 12px;
       margin-right: 10px;
-      background-color: #FE2C55;
+      background-color: var(--secondary);
       color: white;
       border: none;
       border-radius: 6px;
       cursor: pointer;
-    }
-    .content-item button:hover {
-      background-color: #c91c45;
     }
     .output {
       background: #222;
@@ -78,7 +111,7 @@
       gap: 10px;
       margin-top: 10px;
     }
-    .edit-form textarea {
+    .edit-form input, .edit-form textarea {
       width: 100%;
       background: #333;
       color: white;
@@ -87,19 +120,37 @@
       padding: 10px;
     }
     .edit-form button {
-      background-color: #25F4EE;
+      background-color: var(--primary);
       color: black;
+    }
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      #search-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Gestão de Conteúdos</h1>
+  <header>
+    <h1>Gestão de Conteúdos</h1>
+    <a href="create-content.html" class="novo-btn">Criar Novo Conteúdo</a>
+  </header>
   <div id="search-bar">
-    <input type="text" id="search" placeholder="Procurar por título...">
-    <button onclick="carregarConteudos()">Pesquisar</button>
+    <input type="text" id="search" placeholder="Procurar por título ou tag...">
+    <input type="date" id="startDate">
+    <input type="date" id="endDate">
+    <button onclick="carregarConteudos()">Filtrar</button>
     <button onclick="exportarCSV()">Exportar CSV</button>
+    <button class="toggle-mode" onclick="alternarModo()">Modo Claro/Escuro</button>
   </div>
-  <div id="conteudos"></div>  <script>
+  <div id="conteudos"></div>
+  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyBhxtjdc14dv39mr_x_WuXouZrpMyGXpuk",
       authDomain: "novahub-8f4b0.firebaseapp.com",
@@ -110,27 +161,35 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    const container = document.getElementById("conteudos");
+    const container = document.getElementById("conteudos");function carregarConteudos() {
+  const termo = document.getElementById("search").value.toLowerCase();
+  const start = document.getElementById("startDate").value;
+  const end = document.getElementById("endDate").value;
 
-    function carregarConteudos() {
-      const termo = document.getElementById("search").value.toLowerCase();
-      db.collection("conteudos").orderBy("criado_em", "desc").get().then(snapshot => {
-        container.innerHTML = "";
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          if (!termo || data.titulo.toLowerCase().includes(termo)) {
-            const div = document.createElement("div");
-            div.className = "content-item";
-            div.innerHTML = `
-              <h2>${data.titulo}</h2>
-              <div class="output">${data.conteudo}</div>
-              <div class="actions">
-                <button onclick="eliminar('${doc.id}')">Eliminar</button>
-                <button onclick="editar('${doc.id}')">Editar</button>
-              </div>
-              <form class="edit-form" id="form-${doc.id}" onsubmit="return guardar(event, '${doc.id}')">
-                <input type="text" name="titulo" value="${data.titulo}" required />
-                <textarea name="conteudo" rows="5" required>${data.conteudo}</textarea><button type="submit">Guardar Alterações</button>
+  db.collection("conteudos").orderBy("criado_em", "desc").get().then(snapshot => {
+    container.innerHTML = "";
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const dataCriacao = data.criado_em?.toDate?.() || new Date();
+      const dentroDoIntervalo = (!start || new Date(start) <= dataCriacao) && (!end || new Date(end) >= dataCriacao);
+      const corresponde = !termo || data.titulo.toLowerCase().includes(termo) || (data.tags || []).some(t => t.toLowerCase().includes(termo));
+
+      if (dentroDoIntervalo && corresponde) {
+        const div = document.createElement("div");
+        div.className = "content-item";
+        div.innerHTML = `
+          <h2>${data.titulo}</h2>
+          <div class="badges">${(data.tags || []).map(t => `<span class='badge'>${t}</span>`).join(' ')}</div>
+          <div class="output">${data.conteudo}</div>
+          <div class="actions">
+            <button onclick="eliminar('${doc.id}')">Eliminar</button>
+            <button onclick="editar('${doc.id}')">Editar</button>
+          </div>
+          <form class="edit-form" id="form-${doc.id}" onsubmit="return guardar(event, '${doc.id}')">
+            <input type="text" name="titulo" value="${data.titulo}" required />
+            <textarea name="conteudo" rows="5" required>${data.conteudo}</textarea>
+            <input type="text" name="tags" value="${(data.tags || []).join(', ')}" placeholder="tag1, tag2" />
+            <button type="submit">Guardar Alterações</button>
           </form>
         `;
         container.appendChild(div);
@@ -142,7 +201,7 @@
 function eliminar(id) {
   if (confirm("Tens a certeza que queres eliminar este conteúdo?")) {
     db.collection("conteudos").doc(id).delete().then(() => {
-      alert("Conteúdo eliminado com sucesso.");
+      alert("Conteúdo eliminado.");
       carregarConteudos();
     });
   }
@@ -158,11 +217,11 @@ function guardar(e, id) {
   const form = document.getElementById(`form-${id}`);
   const titulo = form.titulo.value;
   const conteudo = form.conteudo.value;
+  const tags = form.tags.value.split(',').map(t => t.trim()).filter(t => t);
   db.collection("conteudos").doc(id).update({
-    titulo: titulo,
-    conteudo: conteudo
+    titulo, conteudo, tags
   }).then(() => {
-    alert("Conteúdo atualizado com sucesso.");
+    alert("Atualizado com sucesso.");
     carregarConteudos();
   });
   return false;
@@ -170,10 +229,10 @@ function guardar(e, id) {
 
 function exportarCSV() {
   db.collection("conteudos").get().then(snapshot => {
-    let csv = "Título,Conteúdo\n";
+    let csv = "Título,Conteúdo,Tags\n";
     snapshot.forEach(doc => {
-      const data = doc.data();
-      csv += `"${data.titulo.replace(/"/g, '""')}","${data.conteudo.replace(/"/g, '""')}"\n`;
+      const d = doc.data();
+      csv += `"${d.titulo.replace(/"/g, '""')}","${d.conteudo.replace(/"/g, '""')}","${(d.tags || []).join(', ')}"\n`;
     });
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
@@ -183,6 +242,12 @@ function exportarCSV() {
     link.click();
     document.body.removeChild(link);
   });
+}
+
+function alternarModo() {
+  const dark = getComputedStyle(document.body).backgroundColor === "rgb(18, 18, 18)";
+  document.body.style.setProperty('--bg', dark ? '#ffffff' : '#121212');
+  document.body.style.setProperty('--text', dark ? '#000000' : '#ffffff');
 }
 
 carregarConteudos();
