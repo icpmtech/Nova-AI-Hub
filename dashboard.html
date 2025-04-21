@@ -18,20 +18,55 @@
       background-color: var(--dark-color);
       color: var(--light-color);
       margin: 0;
+      display: flex;
+    }
+    .sidebar {
+      width: 220px;
+      background: #111;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.4);
+    }
+    .sidebar h2 {
+      color: var(--primary-color);
+      margin-bottom: 30px;
+    }
+    .sidebar a {
+      color: #ccc;
+      text-decoration: none;
+      margin-bottom: 15px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+    .sidebar a:hover {
+      color: var(--primary-color);
+    }
+    .main {
+      flex: 1;
       padding: 40px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
     h1 {
-      font-size: 2.8rem;
+      font-size: 2.5rem;
       background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 10px;
     }
+    .lang-select {
+      margin-bottom: 20px;
+    }
+    select {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: none;
+    }
     p {
-      font-size: 1.1rem;
+      font-size: 1rem;
       color: #ccc;
     }
     button, .copy-btn {
@@ -63,7 +98,6 @@
       border-radius: 10px;
       width: 320px;
       box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-      position: relative;
     }
     .card h2 {
       font-size: 1.4rem;
@@ -73,13 +107,6 @@
     .card p {
       font-size: 0.95rem;
       color: #ccc;
-    }
-    .card ul {
-      list-style: none;
-      padding: 0;
-    }
-    .card ul li {
-      margin-bottom: 8px;
     }
     pre {
       background: #333;
@@ -95,55 +122,63 @@
       background: #25F4EE;
       color: #000;
     }
-    .lang-select {
-      margin-bottom: 20px;
-    }
   </style>
 </head>
 <body>
-  <h1 data-lang="welcome">Bem-vindo ao Nova AI Hub</h1>
-  <div class="lang-select">
-    <select onchange="setLang(this.value)">
-      <option value="pt">Português</option>
-      <option value="en">English</option>
-      <option value="es">Español</option>
-      <option value="fr">Français</option>
-    </select>
-  </div>
-  <p id="user-info">A carregar utilizador...</p>
-  <button onclick="logout()" data-lang="logout">Terminar Sessão</button>  <div class="cards">
-    <div class="card">
-      <h2>Ollama WebUI - AWS</h2>
-      <p data-lang="aws_desc">Cria EC2 Ubuntu 22.04 e corre:</p>
-      <pre id="cmd1">docker run -d -p 11434:11434 --name ollama ollama/ollama</pre>
-      <pre id="cmd2">docker run -d -p 3000:8080 --name ollama-webui \
+  <nav class="sidebar">
+    <h2>Nova AI Hub</h2>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="community.html">Comunidade</a>
+    <a href="library.html">Biblioteca</a>
+    <a href="tutorials.html">Tutoriais</a>
+    <a href="#" onclick="logout()">Sair</a>
+  </nav>
+  <div class="main">
+    <h1 data-lang="welcome">Bem-vindo ao Nova AI Hub</h1>
+    <div class="lang-select">
+      <select onchange="setLang(this.value)">
+        <option value="pt">Português</option>
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+      </select>
+    </div>
+    <p id="user-info">A carregar utilizador...</p>
+    <div class="cards">
+      <div class="card">
+        <h2>Ollama WebUI - AWS</h2>
+        <p data-lang="aws_desc">Cria EC2 Ubuntu 22.04 e corre:</p>
+        <pre id="cmd1">docker run -d -p 11434:11434 --name ollama ollama/ollama</pre>
+        <pre id="cmd2">docker run -d -p 3000:8080 --name ollama-webui \
 -e "OLLAMA_API_BASE_URL=http://host.docker.internal:11434/api" \
 ghcr.io/ollama-webui/ollama-webui</pre>
-      <button class="copy-btn" onclick="copy('cmd1')" data-lang="copy_ollama">Copiar Ollama</button>
-      <button class="copy-btn" onclick="copy('cmd2')" data-lang="copy_webui">Copiar WebUI</button>
-      <a href="https://console.aws.amazon.com/ec2" target="_blank"><button>Ir para AWS</button></a>
+        <button class="copy-btn" onclick="copy('cmd1')" data-lang="copy_ollama">Copiar Ollama</button>
+        <button class="copy-btn" onclick="copy('cmd2')" data-lang="copy_webui">Copiar WebUI</button>
+        <a href="https://console.aws.amazon.com/ec2" target="_blank"><button>Ir para AWS</button></a>
+      </div>
+      <div class="card">
+        <h2>Ollama WebUI - Azure</h2>
+        <p data-lang="azure_desc">Cria uma VM Ubuntu e executa os mesmos comandos Docker:</p>
+        <pre id="cmd3">sudo apt install docker.io docker-compose -y</pre>
+        <button class="copy-btn" onclick="copy('cmd3')" data-lang="copy_docker">Copiar Instalação Docker</button>
+        <a href="https://portal.azure.com/#create/Microsoft.VirtualMachine" target="_blank"><button>Ir para Azure</button></a>
+      </div>
+      <div class="card">
+        <h2>Ollama WebUI - Vultr</h2>
+        <p data-lang="vultr_desc">Cria instância High Frequency com Ubuntu e corre Docker Compose:</p>
+        <pre id="cmd4">curl -fsSL https://get.docker.com | sh</pre>
+        <button class="copy-btn" onclick="copy('cmd4')" data-lang="copy_docker">Copiar Instalação Docker</button>
+        <a href="https://my.vultr.com/deploy" target="_blank"><button>Ir para Vultr</button></a>
+      </div>
+      <div class="card">
+        <h2>Stable Diffusion - AUTOMATIC1111</h2>
+        <p data-lang="auto_desc">Executar versão CPU com porta 7860:</p>
+        <pre id="cmd5">docker run -d -p 7860:7860 ghcr.io/abdbanho/stable-diffusion-webui:auto-cpu</pre>
+        <button class="copy-btn" onclick="copy('cmd5')" data-lang="copy_sd">Copiar Stable Diffusion</button>
+      </div>
     </div>
-    <div class="card">
-      <h2>Ollama WebUI - Azure</h2>
-      <p data-lang="azure_desc">Cria uma VM Ubuntu e executa os mesmos comandos Docker:</p>
-      <pre id="cmd3">sudo apt install docker.io docker-compose -y</pre>
-      <button class="copy-btn" onclick="copy('cmd3')" data-lang="copy_docker">Copiar Instalação Docker</button>
-      <a href="https://portal.azure.com/#create/Microsoft.VirtualMachine" target="_blank"><button>Ir para Azure</button></a>
-    </div>
-    <div class="card">
-      <h2>Ollama WebUI - Vultr</h2>
-      <p data-lang="vultr_desc">Cria instância High Frequency com Ubuntu e corre Docker Compose:</p>
-      <pre id="cmd4">curl -fsSL https://get.docker.com | sh</pre>
-      <button class="copy-btn" onclick="copy('cmd4')" data-lang="copy_docker">Copiar Instalação Docker</button>
-      <a href="https://my.vultr.com/deploy" target="_blank"><button>Ir para Vultr</button></a>
-    </div>
-    <div class="card">
-      <h2>Stable Diffusion - AUTOMATIC1111</h2>
-      <p data-lang="auto_desc">Executar versão CPU com porta 7860:</p>
-      <pre id="cmd5">docker run -d -p 7860:7860 ghcr.io/abdbanho/stable-diffusion-webui:auto-cpu</pre>
-      <button class="copy-btn" onclick="copy('cmd5')" data-lang="copy_sd">Copiar Stable Diffusion</button>
-    </div>
-  </div>  <script>
+  </div>
+  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyBhxtjdc14dv39mr_x_WuXouZrpMyGXpuk",
       authDomain: "novahub-8f4b0.firebaseapp.com",
@@ -153,70 +188,68 @@ ghcr.io/ollama-webui/ollama-webui</pre>
       appId: "1:619675546300:web:1ae7b1e798dddfb92616b9",
       measurementId: "G-TLM12MD10G"
     };
-    firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    document.getElementById("user-info").textContent = `Olá, ${user.email}`;
+  } else {
+    window.location.href = "login.html";
+  }
+});
 
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        document.getElementById("user-info").textContent = `Olá, ${user.email}`;
-      } else {
-        window.location.href = "login.html";
-      }
-    });
+function logout() {
+  firebase.auth().signOut().then(() => {
+    window.location.href = "login.html";
+  });
+}
 
-    function logout() {
-      firebase.auth().signOut().then(() => {
-        window.location.href = "login.html";
-      });
+function copy(id) {
+  const text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    alert('Comando copiado!');
+  });
+}
+
+const translations = {
+  pt: {
+    welcome: "Bem-vindo ao Nova AI Hub",
+    aws_desc: "Cria EC2 Ubuntu 22.04 e corre:",
+    azure_desc: "Cria uma VM Ubuntu e executa os mesmos comandos Docker:",
+    vultr_desc: "Cria instância High Frequency com Ubuntu e corre Docker Compose:",
+    auto_desc: "Executar versão CPU com porta 7860:",
+    copy_ollama: "Copiar Ollama",
+    copy_webui: "Copiar WebUI",
+    copy_docker: "Copiar Instalação Docker",
+    copy_sd: "Copiar Stable Diffusion"
+  },
+  en: {
+    welcome: "Welcome to Nova AI Hub",
+    aws_desc: "Launch EC2 Ubuntu 22.04 and run:",
+    azure_desc: "Create an Ubuntu VM and run the same Docker commands:",
+    vultr_desc: "Create a High Frequency instance and install Docker:",
+    auto_desc: "Run CPU version on port 7860:",
+    copy_ollama: "Copy Ollama",
+    copy_webui: "Copy WebUI",
+    copy_docker: "Copy Docker Install",
+    copy_sd: "Copy Stable Diffusion"
+  }
+};
+
+function setLang(lang) {
+  localStorage.setItem("lang", lang);
+  document.querySelectorAll("[data-lang]").forEach(el => {
+    const key = el.getAttribute("data-lang");
+    if (translations[lang] && translations[lang][key]) {
+      el.textContent = translations[lang][key];
     }
+  });
+}
 
-    function copy(id) {
-      const text = document.getElementById(id).innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        alert('Comando copiado!');
-      });
-    }
+window.addEventListener("DOMContentLoaded", () => {
+  const lang = localStorage.getItem("lang") || "pt";
+  document.querySelector("select").value = lang;
+  setLang(lang);
+});
 
-    const translations = {
-      pt: {
-        welcome: "Bem-vindo ao Nova AI Hub",
-        logout: "Terminar Sessão",
-        aws_desc: "Cria EC2 Ubuntu 22.04 e corre:",
-        azure_desc: "Cria uma VM Ubuntu e executa os mesmos comandos Docker:",
-        vultr_desc: "Cria instância High Frequency com Ubuntu e corre Docker Compose:",
-        auto_desc: "Executar versão CPU com porta 7860:",
-        copy_ollama: "Copiar Ollama",
-        copy_webui: "Copiar WebUI",
-        copy_docker: "Copiar Instalação Docker",
-        copy_sd: "Copiar Stable Diffusion"
-      },
-      en: {
-        welcome: "Welcome to Nova AI Hub",
-        logout: "Log Out",
-        aws_desc: "Launch EC2 Ubuntu 22.04 and run:",
-        azure_desc: "Create an Ubuntu VM and run the same Docker commands:",
-        vultr_desc: "Create a High Frequency instance and install Docker:",
-        auto_desc: "Run CPU version on port 7860:",
-        copy_ollama: "Copy Ollama",
-        copy_webui: "Copy WebUI",
-        copy_docker: "Copy Docker Install",
-        copy_sd: "Copy Stable Diffusion"
-      }
-    };
-
-    function setLang(lang) {
-      localStorage.setItem("lang", lang);
-      document.querySelectorAll("[data-lang]").forEach(el => {
-        const key = el.getAttribute("data-lang");
-        if (translations[lang] && translations[lang][key]) {
-          el.textContent = translations[lang][key];
-        }
-      });
-    }
-
-    window.addEventListener("DOMContentLoaded", () => {
-      const lang = localStorage.getItem("lang") || "pt";
-      document.querySelector("select").value = lang;
-      setLang(lang);
-    });
-  </script></body>
+  </script>
+</body>
 </html>
