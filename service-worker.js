@@ -1,7 +1,7 @@
 
 const CACHE_NAME = 'nova-ai-hub-cache-v1';
 const FILES_TO_CACHE = [
-  '/responsive-dashboard.html',
+  '/dashboard.html',
   '/manifest.json',
   '/service-worker.js',
   '/styles.css', // if you extract inline CSS
