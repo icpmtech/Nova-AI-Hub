@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nova AI Hub - Criar Conteúdos</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <style>
+    :root {
+      --primary-color: #25F4EE;
+      --secondary-color: #FE2C55;
+      --dark-color: #010101;
+      --light-color: #ffffff;
+      --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      margin: 0;
+      font-family: var(--font-main);
+      background-color: var(--dark-color);
+      color: var(--light-color);
+      padding: 20px;
+    }
+    h1 {
+      font-size: 2rem;
+      color: var(--primary-color);
+      text-align: center;
+    }
+    form {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    label {
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      background-color: #333;
+      color: #fff;
+      font-size: 1rem;
+    }
+    button {
+      background-color: var(--secondary-color);
+      color: white;
+      padding: 12px;
+      font-weight: bold;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #c91c45;
+    }
+    .preview {
+      margin-top: 30px;
+      background-color: #222;
+      padding: 20px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Criar Conteúdos HTML</h1>
+  <form id="content-form">
+    <label for="titulo">Título:</label>
+    <input type="text" id="titulo" name="titulo" required />
+
+    <label for="conteudo">Conteúdo HTML:</label>
+    <textarea id="conteudo" name="conteudo" rows="10" required></textarea>
+
+    <button type="submit">Pré-visualizar e Guardar</button>
+  </form>
+
+  <div id="preview" class="preview" style="display:none;">
+    <h2>Pré-visualização:</h2>
+    <div id="output"></div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBhxtjdc14dv39mr_x_WuXouZrpMyGXpuk",
+      authDomain: "novahub-8f4b0.firebaseapp.com",
+      projectId: "novahub-8f4b0",
+      storageBucket: "novahub-8f4b0.appspot.com",
+      messagingSenderId: "619675546300",
+      appId: "1:619675546300:web:1ae7b1e798dddfb92616b9"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    document.getElementById("content-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const titulo = document.getElementById("titulo").value;
+      const conteudo = document.getElementById("conteudo").value;
+      const output = `<h1>${titulo}</h1>` + conteudo;
+
+      document.getElementById("output").innerHTML = output;
+      document.getElementById("preview").style.display = "block";
+
+      db.collection("conteudos").add({
+        titulo: titulo,
+        conteudo: conteudo,
+        criado_em: new Date()
+      }).then(() => {
+        alert("Conteúdo guardado com sucesso no Firebase!");
+      }).catch((error) => {
+        console.error("Erro ao guardar: ", error);
+      });
+    });
+  </script>
+</body>
+</html>
