@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nova AI Hub - Autenticação</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <style>
+    :root {
+      --primary-color: #25F4EE;
+      --secondary-color: #FE2C55;
+      --dark-color: #010101;
+      --light-color: #ffffff;
+      --gray-color: #f1f1f1;
+      --light-gray: #f9f9f9;
+      --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background: var(--dark-color);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: var(--light-color);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+    }
+
+    .lang-select {
+      margin-bottom: 20px;
+    }
+
+    select {
+      padding: 8px 12px;
+      border-radius: 20px;
+      border: none;
+      font-weight: 600;
+    }
+
+    .auth-box {
+      background: #1e1e1e;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    h2 {
+      color: var(--primary-color);
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      background: #333;
+      color: white;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: var(--secondary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background: #c91c45;
+    }
+
+    .google-btn {
+      background: #4285F4;
+    }
+
+    .google-btn:hover {
+      background: #3367d6;
+    }
+
+    .status {
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #ccc;
+    }
+
+    .toggle-link {
+      margin-top: 15px;
+      font-size: 0.85em;
+      color: var(--primary-color);
+      cursor: pointer;
+    }
+
+    .toggle-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>Nova AI Hub</h1>
+  <div class="lang-select">
+    <select onchange="setLang(this.value)">
+      <option value="pt">Português</option>
+      <option value="en">English</option>
+      <option value="es">Español</option>
+      <option value="fr">Français</option>
+    </select>
+  </div>
+  <div class="auth-box" id="login-box">
+    <h2 data-lang="login_title">Login</h2>
+    <input type="email" id="login-email" placeholder="Email" />
+    <input type="password" id="login-password" placeholder="Password" />
+    <button onclick="login()" data-lang="login_btn">Entrar</button>
+    <button class="google-btn" onclick="googleLogin()" data-lang="google_login">Entrar com Google</button>
+    <p class="status" id="login-status"></p>
+    <p class="toggle-link" onclick="showRegister()" data-lang="to_register">Não tens conta? Regista-te</p>
+  </div>
+  <div class="auth-box" id="register-box" style="display:none">
+    <h2 data-lang="register_title">Registo</h2>
+    <input type="email" id="register-email" placeholder="Email" />
+    <input type="password" id="register-password" placeholder="Password" />
+    <button onclick="register()" data-lang="register_btn">Registar</button>
+    <button class="google-btn" onclick="googleLogin()" data-lang="google_register">Registar com Google</button>
+    <p class="status" id="register-status"></p>
+    <p class="toggle-link" onclick="showLogin()" data-lang="to_login">Já tens conta? Faz login</p>
+  </div>
+  <script>
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    function login() {
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(user => {
+          document.getElementById('login-status').textContent = `Bem-vindo, ${user.user.email}`;
+          setTimeout(() => window.location.href = "dashboard.html", 1500);
+        })
+        .catch(error => {
+          document.getElementById('login-status').textContent = error.message;
+        });
+    }
+
+    function register() {
+      const email = document.getElementById('register-email').value;
+      const password = document.getElementById('register-password').value;
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(user => {
+          document.getElementById('register-status').textContent = `Registado como ${user.user.email}`;
+          setTimeout(() => window.location.href = "dashboard.html", 1500);
+        })
+        .catch(error => {
+          document.getElementById('register-status').textContent = error.message;
+        });
+    }
+
+    function googleLogin() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider)
+        .then(result => {
+          document.querySelectorAll('.status').forEach(s => s.textContent = `Autenticado como ${result.user.email}`);
+          setTimeout(() => window.location.href = "dashboard.html", 1500);
+        })
+        .catch(error => {
+          document.querySelectorAll('.status').forEach(s => s.textContent = error.message);
+        });
+    }
+
+    function showRegister() {
+      document.getElementById('login-box').style.display = 'none';
+      document.getElementById('register-box').style.display = 'block';
+    }
+
+    function showLogin() {
+      document.getElementById('register-box').style.display = 'none';
+      document.getElementById('login-box').style.display = 'block';
+    }
+
+    const translations = {
+      pt: {
+        login_title: "Login",
+        login_btn: "Entrar",
+        google_login: "Entrar com Google",
+        to_register: "Não tens conta? Regista-te",
+        register_title: "Registo",
+        register_btn: "Registar",
+        google_register: "Registar com Google",
+        to_login: "Já tens conta? Faz login"
+      },
+      en: {
+        login_title: "Login",
+        login_btn: "Sign In",
+        google_login: "Sign in with Google",
+        to_register: "Don't have an account? Register",
+        register_title: "Register",
+        register_btn: "Register",
+        google_register: "Register with Google",
+        to_login: "Already have an account? Login"
+      },
+      es: {
+        login_title: "Iniciar sesión",
+        login_btn: "Entrar",
+        google_login: "Entrar con Google",
+        to_register: "¿No tienes cuenta? Regístrate",
+        register_title: "Registro",
+        register_btn: "Registrar",
+        google_register: "Registrar con Google",
+        to_login: "¿Ya tienes cuenta? Inicia sesión"
+      },
+      fr: {
+        login_title: "Connexion",
+        login_btn: "Se connecter",
+        google_login: "Connexion avec Google",
+        to_register: "Pas de compte ? S'inscrire",
+        register_title: "Inscription",
+        register_btn: "S'inscrire",
+        google_register: "S'inscrire avec Google",
+        to_login: "Déjà inscrit ? Connexion"
+      }
+    };
+
+    function setLang(lang) {
+      localStorage.setItem('lang', lang);
+      document.querySelectorAll('[data-lang]').forEach(el => {
+        const key = el.getAttribute('data-lang');
+        if (translations[lang] && translations[lang][key]) {
+          el.textContent = translations[lang][key];
+        }
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const lang = localStorage.getItem('lang') || 'pt';
+      document.querySelector('select').value = lang;
+      setLang(lang);
+    });
+  </script>
+</body>
+</html>
