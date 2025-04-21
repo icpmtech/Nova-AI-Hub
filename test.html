@@ -150,7 +150,37 @@
     <p id="user-info">A carregar utilizador...</p>
     <div class="cards">
 
-
+<div class="card">
+        <h2>Ollama WebUI - AWS</h2>
+        <p data-lang="aws_desc">Cria EC2 Ubuntu 22.04 e corre:</p>
+        <pre id="cmd1">docker run -d -p 11434:11434 --name ollama ollama/ollama</pre>
+        <pre id="cmd2">docker run -d -p 3000:8080 --name ollama-webui \
+-e "OLLAMA_API_BASE_URL=http://host.docker.internal:11434/api" \
+ghcr.io/ollama-webui/ollama-webui</pre>
+        <button class="copy-btn" onclick="copy('cmd1')" data-lang="copy_ollama">Copiar Ollama</button>
+        <button class="copy-btn" onclick="copy('cmd2')" data-lang="copy_webui">Copiar WebUI</button>
+        <a href="https://console.aws.amazon.com/ec2" target="_blank"><button>Ir para AWS</button></a>
+      </div>
+      <div class="card">
+        <h2>Ollama WebUI - Azure</h2>
+        <p data-lang="azure_desc">Cria uma VM Ubuntu e executa os mesmos comandos Docker:</p>
+        <pre id="cmd3">sudo apt install docker.io docker-compose -y</pre>
+        <button class="copy-btn" onclick="copy('cmd3')" data-lang="copy_docker">Copiar Instalação Docker</button>
+        <a href="https://portal.azure.com/#create/Microsoft.VirtualMachine" target="_blank"><button>Ir para Azure</button></a>
+      </div>
+      <div class="card">
+        <h2>Ollama WebUI - Vultr</h2>
+        <p data-lang="vultr_desc">Cria instância High Frequency com Ubuntu e corre Docker Compose:</p>
+        <pre id="cmd4">curl -fsSL https://get.docker.com | sh</pre>
+        <button class="copy-btn" onclick="copy('cmd4')" data-lang="copy_docker">Copiar Instalação Docker</button>
+        <a href="https://my.vultr.com/deploy" target="_blank"><button>Ir para Vultr</button></a>
+      </div>
+      <div class="card">
+        <h2>Stable Diffusion - AUTOMATIC1111</h2>
+        <p data-lang="auto_desc">Executar versão CPU com porta 7860:</p>
+        <pre id="cmd5">docker run -d -p 7860:7860 ghcr.io/abdbanho/stable-diffusion-webui:auto-cpu</pre>
+        <button class="copy-btn" onclick="copy('cmd5')" data-lang="copy_sd">Copiar Stable Diffusion</button>
+      </div>
 
       
     </div>
