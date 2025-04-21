@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Nova Translate AI - Cyberpunk</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Orbitron', monospace;
+    }
+    .neon-btn {
+      background: linear-gradient(90deg, #f0f, #0ff);
+      color: black;
+      font-weight: bold;
+      text-shadow: 0 0 5px #fff;
+    }
+    .neon-border {
+      border: 2px solid #0ff;
+      box-shadow: 0 0 10px #0ff;
+    }
+    .spinner {
+      border-top-color: #0ff;
+      border-left-color: #f0f;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body class="bg-black text-white min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-gray-900 border-b border-cyan-500 p-4 flex justify-between items-center">
+    <h1 class="text-xl md:text-2xl text-pink-500 font-bold">Nova Translate AI</h1>
+    <button onclick="toggleSidebar()" class="neon-btn px-3 py-1 rounded md:hidden">☰</button>
+  </header>
+
+  <div class="flex flex-1 overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="bg-gray-900 w-64 p-4 space-y-4 overflow-y-auto transform -translate-x-full md:translate-x-0 md:relative fixed top-0 left-0 h-full z-50 md:z-auto md:block transition-transform duration-300">
+      <h2 class="text-xl font-bold text-cyan-400 mb-4">Histórico</h2>
+      <div id="itemList" class="space-y-2"></div>
+      <div class="mt-4 space-x-2">
+        <button onclick="exportJSON()" class="neon-btn px-3 py-1 rounded text-sm">Exportar JSON</button>
+        <button onclick="exportCSV()" class="neon-btn px-3 py-1 rounded text-sm">CSV</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-4 md:p-6 overflow-y-auto space-y-4">
+
+      <textarea id="input" class="w-full p-4 bg-gray-800 rounded neon-border mb-2" placeholder="Escreve ou grava texto..."></textarea>
+
+      <div class="flex flex-wrap gap-2">
+        <button onclick="startSpeechRecognition()" class="neon-btn px-4 py-2 rounded">🎤 Gravar</button>
+
+        <select id="sourceLang" class="bg-black text-white neon-border px-2 py-1 rounded">
+          <option value="pt">Português</option>
+          <option value="en">Inglês</option>
+          <option value="es">Espanhol</option>
+        </select>
+
+        <select id="targetLang" class="bg-black text-white neon-border px-2 py-1 rounded">
+          <option value="en">Inglês</option>
+          <option value="pt">Português</option>
+          <option value="es">Espanhol</option>
+        </select>
+
+        <button onclick="translateText()" class="neon-btn px-4 py-2 rounded">Traduzir</button>
+        <button onclick="speakText()" class="neon-btn px-4 py-2 rounded">🔊 Ler</button>
+      </div>
+
+      <!-- Spinner -->
+      <div id="spinner" class="hidden w-8 h-8 border-4 border-white rounded-full mx-auto mt-4 spinner"></div>
+
+      <div id="output" class="bg-gray-800 p-4 rounded neon-border min-h-[80px] whitespace-pre-wrap"></div>
+
+      <button onclick="saveItem()" class="neon-btn px-4 py-2 rounded mt-2">Guardar Tradução</button>
+    </main>
+  </div>
+
+  <script>
+    const API_KEY = "sk-67fee6e60c954e71b32bf6ccb1506c28";
+    let editingIndex = null;
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('-translate-x-full');
+    }
+
+    function startSpeechRecognition() {
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = document.getElementById("sourceLang").value;
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById("input").value = transcript;
+      };
+      recognition.start();
+    }
+
+    async function translateText() {
+      const inputText = document.getElementById("input").value.trim();
+      const target = document.getElementById("targetLang").value;
+
+      if (!inputText) return;
+
+      const prompt = `Traduz para ${target} e responde apenas com o texto traduzido:\n${inputText}`;
+
+      const spinner = document.getElementById("spinner");
+      const output = document.getElementById("output");
+      spinner.classList.remove("hidden");
+      output.innerText = "";
+
+      try {
+        const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`
+          },
+          body: JSON.stringify({
+            model: "deepseek-chat",
+            messages: [{ role: "user", content: prompt }],
+            temperature: 0.3
+          })
+        });
+
+        const data = await response.json();
+        const result = data.choices?.[0]?.message?.content || "Erro na tradução.";
+        output.innerText = result.trim();
+      } catch (err) {
+        output.innerText = "Erro ao contactar o serviço de tradução.";
+      } finally {
+        spinner.classList.add("hidden");
+      }
+    }
+
+    function speakText() {
+      const text = document.getElementById("output").innerText;
+      const lang = document.getElementById("targetLang").value;
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = lang === 'pt' ? 'pt-PT' : lang === 'en' ? 'en-US' : 'es-ES';
+      speechSynthesis.speak(utterance);
+    }
+
+    function saveItem() {
+      const outputText = document.getElementById('output').innerText.trim();
+      if (!outputText) return;
+      const items = JSON.parse(localStorage.getItem('items') || '[]');
+      items.push(outputText);
+      localStorage.setItem('items', JSON.stringify(items));
+      loadItems();
+    }
+
+    function loadItems() {
+      const items = JSON.parse(localStorage.getItem('items') || '[]');
+      const list = document.getElementById('itemList');
+      list.innerHTML = '';
+      items.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'bg-black p-2 rounded border border-cyan-500 text-sm';
+        div.innerHTML = `
+          <div class="mb-1">${item}</div>
+          <div class="flex gap-2">
+            <button onclick="editItem(${index})" class="text-yellow-400 hover:underline">✏️</button>
+            <button onclick="deleteItem(${index})" class="text-red-500 hover:underline">🗑️</button>
+          </div>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function editItem(index) {
+      const items = JSON.parse(localStorage.getItem('items') || '[]');
+      document.getElementById("input").value = items[index];
+    }
+
+    function deleteItem(index) {
+      const items = JSON.parse(localStorage.getItem('items') || '[]');
+      items.splice(index, 1);
+      localStorage.setItem('items', JSON.stringify(items));
+      loadItems();
+    }
+
+    function exportJSON() {
+      const items = JSON.parse(localStorage.getItem('items') || '[]');
+      const blob = new Blob([JSON.stringify(items, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "nova_translate.json";
+      a.click();
+    }
+
+    function exportCSV() {
+      const items = JSON.parse(localStorage.getItem('items') || '[]');
+      const csv = items.map((t, i) => `"${i + 1}","${t.replace(/"/g, '""')}"`).join("\n");
+      const blob = new Blob(["Index,Texto\n" + csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "nova_translate.csv";
+      a.click();
+    }
+
+    loadItems();
+  </script>
+</body>
+</html>
