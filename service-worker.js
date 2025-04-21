@@ -29,6 +29,6 @@ self.addEventListener('activate', evt => {
 self.addEventListener('fetch', evt => {
   if (evt.request.mode !== 'navigate') return;
   evt.respondWith(
-    fetch(evt.request).catch(() => caches.match('/responsive-dashboard.html'))
+    fetch(evt.request).catch(() => caches.match('/dashboard.html'))
   );
 });
